@@ -10,8 +10,6 @@ import StudentSignup from "./screen/StudentSignup";
 import StudentLogin from "./screen/StudentLogin";
 import Navbar from "../src/components/Navbar";
 
-
-
 const App =()=>{
   return(
     <div>
