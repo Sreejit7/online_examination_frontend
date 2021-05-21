@@ -1,5 +1,5 @@
-import React from "react";
-import {Route } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Route, Switch } from "react-router-dom";
 import Home from "./screen/Home";
 import Login from "./screen/Login";
 import Registration from "./screen/Registration";
@@ -8,36 +8,42 @@ import TeacherSignup from "./screen/TeacherSignup";
 import TeacherLogin from "./screen/TeacherLogin";
 import StudentSignup from "./screen/StudentSignup";
 import StudentLogin from "./screen/StudentLogin";
-import Navbar from "../src/components/Navbar";
+import Navbar from "./components/Navbar";
+import UploadQuestion from './screen/UploadQuestion';
 
 const App =()=>{
   return(
     <div>
       <Navbar />
-      <Route exact path='/'>
-        <Home />
-      </Route>
-      <Route path='/login'>
-        <Login />
-      </Route>
-      <Route path='/registration'>
-        <Registration />
-      </Route>
-      <Route path='/contact'>
-        <Contact />
-      </Route>
-      <Route path='/teacherSignup'>
-        <TeacherSignup />
-      </Route>
-      <Route path='/studentSignup'>
-        <StudentSignup />
-      </Route>
-      <Route path='/teacherLogin'>
-        <TeacherLogin />
-      </Route>
-      <Route path='/studentLogin'>
-        <StudentLogin />
-      </Route>
+      <Switch>
+        <Route exact path='/'>
+          <Home />
+        </Route>
+        <Route exact path='/login'>
+          <Login />
+        </Route>
+        <Route exact path='/registration'>
+          <Registration />
+        </Route>
+        <Route exact path='/contact'>
+          <Contact />
+        </Route>
+        <Route exact path='/teacherSignup'>
+          <TeacherSignup />
+        </Route>
+        <Route exact path='/studentSignup'>
+          <StudentSignup />
+        </Route>
+        <Route exact path='/teacherLogin'>
+          <TeacherLogin />
+        </Route>
+        <Route exact path='/studentLogin'>
+          <StudentLogin />
+        </Route>
+        <Route exact path = "/uploadQuestion">
+          <UploadQuestion />
+        </Route>
+      </Switch>
     </div>
   );
 }
