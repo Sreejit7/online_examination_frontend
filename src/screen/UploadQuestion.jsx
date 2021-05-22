@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { MdFileUpload } from 'react-icons/md';
-import AddQuestion from "../components/AddQuestion";
+import AddQuestion from "../components/AddQuestion/AddQuestion";
 
 function UploadQuestion() {
   const [questionCount, setQuestionCount] = useState(0);

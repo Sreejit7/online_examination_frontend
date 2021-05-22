@@ -1,14 +1,15 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
-
+  const [questions, setQuestions] = useState([]);
 
   return (
     <AppContext.Provider
       value = {{
-
+        questions,
+        setQuestions
       }}
     >
       {children}

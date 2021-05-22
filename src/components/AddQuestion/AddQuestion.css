@@ -1,0 +1,9 @@
+.option-btn{
+  opacity: 0.4;
+}
+.option-btn:hover{
+  opacity: 0.75;
+}
+.correct-option{
+  opacity: 1;
+}
