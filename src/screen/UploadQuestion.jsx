@@ -6,6 +6,7 @@ import { useGlobalContext } from "../context";
 
 function UploadQuestion() {
   const { questions, setQuestions, questionCount } = useGlobalContext();
+  console.log(questions);
   return (
     <main className = "page">
       <Button variant = "success" className = "btn-icon">
@@ -13,9 +14,9 @@ function UploadQuestion() {
         <MdFileUpload/>
       </Button>
       <div className = "container questions-container">
-        {Array(questionCount).fill().map((_, i) => {
+        {Array(questions.length + 1).fill().map((_, i) => {
           return (
-          <AddQuestion key = {i} />
+          <AddQuestion key = {i} questionIndex = {i}/>
           );
         })}
       </div>
