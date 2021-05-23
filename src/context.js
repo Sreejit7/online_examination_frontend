@@ -4,12 +4,15 @@ const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
   const [questions, setQuestions] = useState([]);
+  const [questionCount, setQuestionCount] = useState(1);
 
   return (
     <AppContext.Provider
       value = {{
         questions,
-        setQuestions
+        setQuestions,
+        questionCount,
+        setQuestionCount
       }}
     >
       {children}

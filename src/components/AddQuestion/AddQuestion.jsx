@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
-import { MdDone } from 'react-icons/md';
+import { MdDone, MdDelete } from 'react-icons/md';
+import { FaEdit } from 'react-icons/fa';
 import { useGlobalContext } from "../../context";
 import './AddQuestion.css';
 
 function AddQuestion() {
-  const { questions, setQuestions } = useGlobalContext();
+  const { questions, setQuestions, questionCount, setQuestionCount } = useGlobalContext();
   const [questionItem, setQuestionItem] = useState({
     title: '',
     options: ['','','',''],
     correctIndex: null
   });
+  const [inputMode, setInputMode] = useState(false);
+  const [saveMode, setSaveMode] = useState(false);
+  const [questionTitle, setQuestionTitle] = useState('');
   const ansOptions = ['A', 'B', 'C', 'D'];
   const initialQuestionState = {
     title: '',
@@ -44,14 +48,37 @@ function AddQuestion() {
   const handleAddQuestion = (e) => {
     e.preventDefault();
     setQuestions([...questions, questionItem]);
+    setQuestionCount(questionCount + 1);
+    setQuestionTitle(questionItem.title);
     setQuestionItem(initialQuestionState);
+    setInputMode(false);
+    setSaveMode(true);
   }
-  console.log(questions);
+
+  const handleQuestionInput = (e) => {
+    e.preventDefault();
+    setInputMode(true);
+    setSaveMode(false);
+  }
   return (
     <section className = "mb-5 mt-5 ">
-      <Button variant = "light" size = "lg" block>
+      {!inputMode && saveMode && (
+      <article className = "question-saved">
+        <h4 className = "question-saved-title">{questionTitle}</h4>
+        <nav className = "question-saved-btns">
+          <Button variant = "dark">
+            <FaEdit />
+          </Button>
+          <Button variant = "danger">
+            <MdDelete />
+          </Button>
+        </nav>
+      </article>)}
+      {!inputMode && !saveMode && (
+      <Button variant = "light" size = "lg" block onClick = {handleQuestionInput}>
         Add Question
-      </Button>
+      </Button>)}
+      {inputMode && !saveMode && (
       <section className = "question-form mb-5 mt-5">
         <InputGroup className = "mb-4">
           <InputGroup.Prepend>
@@ -67,7 +94,7 @@ function AddQuestion() {
         </InputGroup>
         {ansOptions.map((option, index) => {
           return (
-            <InputGroup className ="mb-3" key = {index}>
+            <InputGroup className ="mb-4" key = {index}>
               <InputGroup.Prepend>
                 <Button 
                   variant = "success" 
@@ -88,14 +115,15 @@ function AddQuestion() {
           );
         })}
         <Button 
-          variant = "primary" 
+          variant = "primary"
+          className = "mt-3" 
           size = "lg" 
           onClick = {(e) => handleAddQuestion(e)}
           disabled = {questionItem.correctIndex === null}
         >
           Confirm
         </Button>
-      </section>
+      </section>)}
     </section>
   )
 }
