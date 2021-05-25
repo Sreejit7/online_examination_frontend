@@ -4,7 +4,7 @@ const AppContext = createContext();
 
 export const AppProvider = ({children}) => {
   const [questions, setQuestions] = useState([]);
-  const [questionCount, setQuestionCount] = useState(1);
+  const [questionCount, setQuestionCount] = useState(0);
 
   return (
     <AppContext.Provider

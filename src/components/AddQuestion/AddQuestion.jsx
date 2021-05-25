@@ -1,27 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { MdDone, MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { useGlobalContext } from "../../context";
 import './AddQuestion.css';
 
-function AddQuestion({ questionIndex }) {
-  const { questions, setQuestions, questionCount, setQuestionCount } = useGlobalContext();
+function AddQuestion({ questionIndex, question }) {
+  const { questions, setQuestions } = useGlobalContext();
   const [questionItem, setQuestionItem] = useState({
     title: '',
     options: ['','','',''],
     correctIndex: null
   });
-  const [inputMode, setInputMode] = useState(false);
   const [saveMode, setSaveMode] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState('');
+  const [editMode, setEditMode] = useState(true);
   const ansOptions = ['A', 'B', 'C', 'D'];
-  const initialQuestionState = {
-    title: '',
-    options: ['','','',''],
-    correctIndex: null
-  }
+  useEffect(() => {
+    setQuestionItem(question);
+  },[]);
 
   const handleQuestionTitle = (title) => {
     setQuestionItem({
@@ -46,28 +42,17 @@ function AddQuestion({ questionIndex }) {
     });
   }
 
-  const handleAddQuestion = (e) => {
-    e.preventDefault();
-    setQuestions([...questions, questionItem]);
-    setQuestionCount(questionCount + 1);
-    setQuestionTitle(questionItem.title);
-    setInputMode(false);
-    setSaveMode(true);
-  }
-
   const handleUpdateQuestion = (e) => {
     e.preventDefault();
     let newQuestions = [...questions];
     newQuestions[questionIndex] = questionItem;
     setQuestions(newQuestions);
-    setQuestionTitle(questionItem.title);
     setEditMode(false);
     setSaveMode(true);
   }
 
   const handleEditQuestion = (e) => {
     e.preventDefault();
-    // setQuestionItem(questions[questionIndex]);
     setSaveMode(false);
     setEditMode(true);
   }
@@ -77,19 +62,13 @@ function AddQuestion({ questionIndex }) {
     let newQuestions = [...questions];
     newQuestions.splice(questionIndex, 1);
     setQuestions(newQuestions);
-    setQuestionCount(questionCount - 1);
   }
 
-  const handleQuestionInput = (e) => {
-    e.preventDefault();
-    setInputMode(true);
-    setSaveMode(false);
-  }
   return (
     <section className = "mb-5 mt-5 ">
-      {!inputMode && saveMode && (
+      {!editMode && saveMode && (
       <article className = "question-saved">
-        <h4 className = "question-saved-title">{questionTitle}</h4>
+        <h4 className = "question-saved-title">{question?.title}</h4>
         <nav className = "question-saved-btns">
           <Button variant = "dark">
             <FaEdit onClick = {(e) => handleEditQuestion(e)} />
@@ -99,11 +78,7 @@ function AddQuestion({ questionIndex }) {
           </Button>
         </nav>
       </article>)}
-      {!inputMode && !editMode && !saveMode && (
-      <Button variant = "light" size = "lg" block onClick = {handleQuestionInput}>
-        Add Question
-      </Button>)}
-      {(inputMode || editMode) && !saveMode && (
+      {editMode && !saveMode && (
       <section className = "question-form mb-5 mt-5">
         <InputGroup className = "mb-4">
           <InputGroup.Prepend>
@@ -143,7 +118,7 @@ function AddQuestion({ questionIndex }) {
           variant = "primary"
           className = "mt-3" 
           size = "lg" 
-          onClick = {editMode?(e) => handleUpdateQuestion(e):(e) => handleAddQuestion(e)}
+          onClick = {(e) => handleUpdateQuestion(e)}
           disabled = {questionItem?.correctIndex === null}
         >
           Confirm
