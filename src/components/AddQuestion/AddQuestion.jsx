@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { Alert, Button, FormControl, InputGroup, Row } from "react-bootstrap";
 import { MdDone, MdDelete } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { useGlobalContext } from "../../context";
@@ -10,7 +10,8 @@ function AddQuestion({ questionIndex, question }) {
   const [questionItem, setQuestionItem] = useState({
     title: '',
     options: ['','','',''],
-    correctIndex: null
+    correctIndex: null,
+    marks: 1
   });
   const [saveMode, setSaveMode] = useState(false);
   const [editMode, setEditMode] = useState(true);
@@ -42,6 +43,12 @@ function AddQuestion({ questionIndex, question }) {
     });
   }
 
+  const handleQuestionMarks = (marks) => {
+    setQuestionItem({
+      ...questionItem,
+      marks
+    })
+  }
   const handleUpdateQuestion = (e) => {
     e.preventDefault();
     let newQuestions = [...questions];
@@ -65,15 +72,16 @@ function AddQuestion({ questionIndex, question }) {
   }
 
   return (
-    <section className = "mb-5 mt-5 ">
+    <section className = "mb-3 mt-3">
       {!editMode && saveMode && (
       <article className = "question-saved">
-        <h4 className = "question-saved-title">{question?.title}</h4>
+        <span className = "question-saved-number">{questionIndex + 1}</span>
+        <span className = "question-saved-title ml-3">{question?.title}</span>
         <nav className = "question-saved-btns">
           <Button variant = "dark">
             <FaEdit onClick = {(e) => handleEditQuestion(e)} />
           </Button>
-          <Button variant = "danger">
+          <Button variant = "danger" className = "ml-2">
             <MdDelete onClick = {(e) => handleDeleteQuestion(e)} />
           </Button>
         </nav>
@@ -92,6 +100,20 @@ function AddQuestion({ questionIndex, question }) {
             onChange = {(e) => handleQuestionTitle(e.target.value)} 
           />
         </InputGroup>
+        <section className = "question-form-marks mb-2">
+          <Alert variant = "info">Add Options and Mark the Correct Answer</Alert>
+          <InputGroup className = "question-form-marks-input">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Marks</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              aria-label = "Marks"
+              placeholder = "1"
+              onChange = {(e) => handleQuestionMarks(e.target.value)}
+              value = {questionItem?.marks}
+            />
+          </InputGroup>
+        </section>
         {ansOptions.map((option, index) => {
           return (
             <InputGroup className ="mb-4" key = {index}>
@@ -119,7 +141,7 @@ function AddQuestion({ questionIndex, question }) {
           className = "mt-3" 
           size = "lg" 
           onClick = {(e) => handleUpdateQuestion(e)}
-          disabled = {questionItem?.correctIndex === null}
+          disabled = {questionItem?.title === '' || questionItem?.correctIndex === null}
         >
           Confirm
         </Button>
